@@ -9,10 +9,6 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = {
   turbopack: {},
-  devIndicators: {
-    appIsrStatus: false,
-    buildActivity: false,
-  },
 };
 
 export default withSerwist(nextConfig);
