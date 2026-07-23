@@ -71,7 +71,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
           <footer className="w-full border-t border-border py-4 mt-auto">
             <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-              <p>© {new Date().getFullYear()} Professional Memory. All data stays local.</p>
+              <p>© {new Date().getFullYear()} Work Log. All data stays local.</p>
               <div className="flex items-center gap-4">
                 <span className="flex items-center gap-1.5"><span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span> Offline Ready</span>
                 <span>v0.1.0</span>

@@ -1,6 +1,6 @@
 {
-  "name": "Professional Memory",
-  "short_name": "ProMemory",
+  "name": "Work Log",
+  "short_name": "Work Log",
   "description": "Frictionless work logging for professionals. Open, dump your work, close.",
   "start_url": "/",
   "display": "standalone",

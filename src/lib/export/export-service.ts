@@ -7,7 +7,7 @@ import { db } from '@/lib/db/database';
 interface ExportData {
   version: 1;
   exportedAt: string;
-  app: 'ProfessionalMemory';
+  app: 'WorkLog';
   data: {
     projects: unknown[];
     entries: unknown[];
@@ -44,7 +44,7 @@ export const exportService = {
     const exportData: ExportData = {
       version: 1,
       exportedAt: new Date().toISOString(),
-      app: 'ProfessionalMemory',
+      app: 'WorkLog',
       data: {
         projects,
         entries,
@@ -62,7 +62,7 @@ export const exportService = {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `professional-memory-backup-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `work-log-backup-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
   },
@@ -78,8 +78,8 @@ export const exportService = {
       return { imported: 0, errors: ['Invalid JSON file'] };
     }
 
-    if (parsed.app !== 'ProfessionalMemory' || !parsed.data) {
-      return { imported: 0, errors: ['Not a valid Professional Memory backup file'] };
+    if (parsed.app !== 'WorkLog' || !parsed.data) {
+      return { imported: 0, errors: ['Not a valid Work Log backup file'] };
     }
 
     const errors: string[] = [];

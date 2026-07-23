@@ -11,14 +11,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Professional Memory",
+  title: "Work Log",
   description: "Frictionless work logging for professionals. Open, dump your work, close. Your data stays on your device.",
   keywords: ["work log", "professional", "productivity", "offline", "PWA"],
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Professional Memory",
+    title: "Work Log",
   },
 };
 

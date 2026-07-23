@@ -63,10 +63,10 @@ export function Sidebar() {
         {(!isMobile || sidebarOpen) && (
           <Link href="/" className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <span className="text-sm font-bold text-primary-foreground">PM</span>
+              <span className="text-sm font-bold text-primary-foreground">WL</span>
             </div>
             <span className="text-sm font-semibold tracking-tight">
-              Professional Memory
+              Work Log
             </span>
           </Link>
         )}

@@ -1,5 +1,5 @@
 // ============================================================
-// Professional Memory — Core Type Definitions
+// Work Log — Core Type Definitions
 // ============================================================
 
 /** Base fields shared by all entities */

@@ -1,5 +1,5 @@
 // ============================================================
-// Dexie.js Database — Professional Memory
+// Dexie.js Database — Work Log
 // ============================================================
 
 import Dexie, { type EntityTable } from 'dexie';
