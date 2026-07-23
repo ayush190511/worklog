@@ -330,8 +330,15 @@ export default function EntryEditorPage() {
           value={entry.projectId ?? 'none'}
           onValueChange={(v) => v && autoSave('projectId', v === 'none' ? null : v)}
         >
-          <SelectTrigger className="w-[160px] h-8 text-xs">
-            <SelectValue placeholder="Select project" />
+          <SelectTrigger className="w-[180px] h-8 text-xs font-medium">
+            <SelectValue placeholder="Select project">
+              {entry.projectId && entry.projectId !== 'none' ? (
+                <span className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: projects.find(p => p.id === entry.projectId)?.color }} />
+                  {projects.find(p => p.id === entry.projectId)?.name}
+                </span>
+              ) : "No Project"}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="none">No Project</SelectItem>
@@ -351,7 +358,9 @@ export default function EntryEditorPage() {
           onValueChange={(v) => v && autoSave('categoryId', v === 'none' ? null : v)}
         >
           <SelectTrigger className="w-[160px] h-8 text-xs">
-            <SelectValue placeholder="Select category" />
+            <SelectValue placeholder="Select category">
+              {entry.categoryId && entry.categoryId !== 'none' ? categories.find(c => c.id === entry.categoryId)?.name : "No Category"}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="none">No Category</SelectItem>

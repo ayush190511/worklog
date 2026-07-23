@@ -141,7 +141,14 @@ function EntriesContent() {
         <div className="flex gap-2">
           <Select value={selectedProject} onValueChange={(v) => v && setSelectedProject(v)}>
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Project" />
+              <SelectValue placeholder="Project">
+                {selectedProject === 'all' ? "All Projects" : (
+                  <span className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: projects.find(p => p.id === selectedProject)?.color }} />
+                    {projects.find(p => p.id === selectedProject)?.name}
+                  </span>
+                )}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Projects</SelectItem>
@@ -158,7 +165,9 @@ function EntriesContent() {
 
           <Select value={selectedCategory} onValueChange={(v) => v && setSelectedCategory(v)}>
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Category" />
+              <SelectValue placeholder="Category">
+                {selectedCategory === 'all' ? "All Categories" : categories.find(c => c.id === selectedCategory)?.name}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Categories</SelectItem>
