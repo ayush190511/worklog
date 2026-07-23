@@ -23,7 +23,7 @@ export function TopBar() {
 
   const handleNewEntry = async () => {
     const entry = await entryRepository.create({});
-    router.push(`/entries/${entry.id}`);
+    router.push(`/entries/edit?id=${entry.id}`);
   };
 
   const handleToggleTheme = () => {

@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import React, { useEffect, useState, useCallback, useRef, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   ArrowLeft, Star, Pin, Trash2, Check, Clock,
   ImageIcon, Paperclip, X, Download, History,
@@ -41,10 +41,10 @@ import type {
 } from '@/types';
 import { toast } from 'sonner';
 
-export default function EntryEditorPage() {
+function EntryEditorContent() {
   const router = useRouter();
-  const params = useParams();
-  const entryId = params.id as string;
+  const searchParams = useSearchParams();
+  const entryId = searchParams.get('id') as string;
 
   const [entry, setEntry] = useState<Entry | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -600,5 +600,19 @@ export default function EntryEditorPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function EntryEditorPage() {
+  return (
+    <Suspense fallback={
+      <div className="space-y-4">
+        <Skeleton className="h-8 w-24" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    }>
+      <EntryEditorContent />
+    </Suspense>
   );
 }

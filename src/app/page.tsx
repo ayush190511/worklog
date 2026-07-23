@@ -101,7 +101,7 @@ export default function DashboardPage() {
       if (e.key === 'n' || e.key === 'N') {
         e.preventDefault();
         entryRepository.create({}).then((entry) => {
-          router.push(`/entries/${entry.id}`);
+          router.push(`/entries/edit?id=${entry.id}`);
         });
       }
       if (e.key === '/') {
@@ -115,7 +115,7 @@ export default function DashboardPage() {
 
   const handleNewEntry = async () => {
     const entry = await entryRepository.create({});
-    router.push(`/entries/${entry.id}`);
+    router.push(`/entries/edit?id=${entry.id}`);
   };
 
   if (isLoading) {

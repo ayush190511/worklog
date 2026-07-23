@@ -171,7 +171,7 @@ export default function TimelinePage() {
                   {group.entries.map((entry) => (
                     <button
                       key={entry.id}
-                      onClick={() => router.push(`/entries/${entry.id}`)}
+                      onClick={() => router.push(`/entries/edit?id=${entry.id}`)}
                       className="flex w-full items-start gap-3 rounded-xl border border-transparent px-4 py-3 text-left transition-all hover:border-border hover:bg-accent/50"
                     >
                       <div className="flex-1 min-w-0">

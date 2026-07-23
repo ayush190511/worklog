@@ -106,7 +106,7 @@ function EntriesContent() {
     const entry = await entryRepository.create({
       projectId: selectedProject !== 'all' ? selectedProject : undefined,
     });
-    router.push(`/entries/${entry.id}`);
+    router.push(`/entries/edit?id=${entry.id}`);
   };
 
   const loadMore = () => {

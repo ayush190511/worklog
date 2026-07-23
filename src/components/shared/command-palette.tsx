@@ -67,7 +67,7 @@ export function CommandPalette() {
     switch (action) {
       case 'new-entry':
         entryRepository.create({}).then((entry) => {
-          router.push(`/entries/${entry.id}`);
+          router.push(`/entries/edit?id=${entry.id}`);
         });
         break;
       case 'dashboard':
@@ -93,7 +93,7 @@ export function CommandPalette() {
         break;
       default:
         if (action.startsWith('entry:')) {
-          router.push(`/entries/${action.slice(6)}`);
+          router.push(`/entries/edit?id=${action.slice(6)}`);
         } else if (action.startsWith('project:')) {
           router.push(`/projects`);
         }
