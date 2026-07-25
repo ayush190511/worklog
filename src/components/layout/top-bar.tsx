@@ -2,10 +2,12 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Search, Menu, Moon, Sun } from 'lucide-react';
+import { Plus, Search, Menu, Moon, Sun, Cloud } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useUIStore } from '@/stores/use-ui-store';
 import { useSettingsStore } from '@/stores/use-settings-store';
+import { useSyncStore } from '@/stores/use-sync-store';
+import { googleDriveSync } from '@/lib/sync/google-drive-sync';
 import { entryRepository } from '@/lib/repositories/entry.repository';
 import {
   Tooltip,
@@ -21,6 +23,10 @@ export function TopBar() {
   const theme = useSettingsStore((s) => s.theme);
   const setTheme = useSettingsStore((s) => s.setTheme);
 
+  const isLoggedIn = useSyncStore((s) => s.isLoggedIn);
+  const user = useSyncStore((s) => s.user);
+  const isSyncing = useSyncStore((s) => s.isSyncing);
+
   const handleNewEntry = async () => {
     const entry = await entryRepository.create({});
     router.push(`/entries/edit?id=${entry.id}`);
@@ -28,6 +34,14 @@ export function TopBar() {
 
   const handleToggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
+  const handleSyncClick = async () => {
+    if (isLoggedIn) {
+      await googleDriveSync.pushToDrive();
+    } else {
+      router.push('/settings');
+    }
   };
 
   return (
@@ -41,6 +55,27 @@ export function TopBar() {
       </div>
 
       <div className="flex items-center gap-1.5">
+        {/* Google Sync Button */}
+        <Tooltip>
+          <TooltipTrigger
+            onClick={handleSyncClick}
+            render={
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 relative text-muted-foreground hover:text-foreground"
+              >
+                <Cloud className={`h-4 w-4 ${isLoggedIn ? 'text-blue-500 fill-blue-500/20' : ''}`} />
+                {isSyncing && (
+                  <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-blue-500 animate-ping" />
+                )}
+              </Button>
+            }
+          />
+          <TooltipContent>
+            {isLoggedIn ? `Google Drive Synced (${user?.email}) - Click to sync now` : 'Google Drive Sync (Setup in Settings)'}
+          </TooltipContent>
+        </Tooltip>
         {/* Search / Command Palette */}
         <Tooltip>
           <TooltipTrigger

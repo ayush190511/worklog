@@ -20,6 +20,7 @@ import { useSettingsStore } from '@/stores/use-settings-store';
 import { exportService } from '@/lib/export/export-service';
 import { formatFileSize, getStorageEstimate } from '@/lib/utils/helpers';
 import { db } from '@/lib/db/database';
+import { GoogleSyncCard } from '@/components/shared/google-sync-card';
 import type { ThemeMode } from '@/types';
 import { toast } from 'sonner';
 
@@ -109,8 +110,11 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
-        <p className="text-sm text-muted-foreground">Manage your preferences</p>
+        <p className="text-sm text-muted-foreground">Manage your preferences and cloud sync</p>
       </div>
+
+      {/* Google Drive Cloud Sync */}
+      <GoogleSyncCard />
 
       {/* Theme */}
       <Card>
