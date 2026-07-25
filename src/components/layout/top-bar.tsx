@@ -52,8 +52,10 @@ export function TopBar() {
             >
               <Search className="h-3.5 w-3.5" />
               <span>Search...</span>
-              <kbd className="pointer-events-none ml-2 hidden rounded border border-border bg-muted px-1.5 font-mono text-[10px] text-muted-foreground sm:inline">
-                ⌘K
+              <kbd className="pointer-events-none ml-2 hidden items-center gap-1 rounded border border-border bg-muted/80 px-1.5 py-0.5 font-mono text-[10px] font-medium leading-none text-muted-foreground sm:inline-flex">
+                <span>Ctrl</span>
+                <span className="opacity-60">+</span>
+                <span>K</span>
               </kbd>
             </Button>
           } />
