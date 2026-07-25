@@ -113,6 +113,28 @@ function EntryEditorContent() {
     };
   }, [entryId]);
 
+  // Handle Backspace shortcut to navigate back when focus is outside text inputs
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Backspace') return;
+
+      const activeEl = document.activeElement;
+      const isInput =
+        activeEl &&
+        (activeEl.tagName === 'INPUT' ||
+          activeEl.tagName === 'TEXTAREA' ||
+          (activeEl as HTMLElement).isContentEditable);
+
+      if (!isInput) {
+        e.preventDefault();
+        router.back();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [router]);
+
   // Auto-save with debounce
   const autoSave = useCallback(
     (field: string, value: string | null) => {
