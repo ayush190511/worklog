@@ -43,22 +43,24 @@ export function TopBar() {
       <div className="flex items-center gap-1.5">
         {/* Search / Command Palette */}
         <Tooltip>
-          <TooltipTrigger render={
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={openCommandPalette}
-              className="hidden h-8 gap-2 px-3 text-xs text-muted-foreground sm:flex"
-            >
-              <Search className="h-3.5 w-3.5" />
-              <span>Search...</span>
-              <kbd className="pointer-events-none ml-2 hidden items-center gap-1 rounded border border-border bg-muted/80 px-1.5 py-0.5 font-mono text-[10px] font-medium leading-none text-muted-foreground sm:inline-flex">
-                <span>Ctrl</span>
-                <span className="opacity-60">+</span>
-                <span>K</span>
-              </kbd>
-            </Button>
-          } />
+          <TooltipTrigger
+            onClick={openCommandPalette}
+            render={
+              <Button
+                variant="outline"
+                size="sm"
+                className="hidden h-8 gap-2 px-3 text-xs text-muted-foreground sm:flex"
+              >
+                <Search className="h-3.5 w-3.5" />
+                <span>Search...</span>
+                <kbd className="pointer-events-none ml-2 hidden items-center gap-1 rounded border border-border bg-muted/80 px-1.5 py-0.5 font-mono text-[10px] font-medium leading-none text-muted-foreground sm:inline-flex">
+                  <span>Ctrl</span>
+                  <span className="opacity-60">+</span>
+                  <span>K</span>
+                </kbd>
+              </Button>
+            }
+          />
           <TooltipContent>Command Palette</TooltipContent>
         </Tooltip>
 
@@ -74,35 +76,39 @@ export function TopBar() {
 
         {/* New Entry */}
         <Tooltip>
-          <TooltipTrigger render={
-            <Button
-              variant="default"
-              size="icon"
-              onClick={handleNewEntry}
-              className="h-8 w-8"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          } />
+          <TooltipTrigger
+            onClick={handleNewEntry}
+            render={
+              <Button
+                variant="default"
+                size="icon"
+                className="h-8 w-8"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            }
+          />
           <TooltipContent>New Entry (N)</TooltipContent>
         </Tooltip>
 
         {/* Theme toggle */}
         <Tooltip>
-          <TooltipTrigger render={
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleToggleTheme}
-              className="h-8 w-8"
-            >
-              {theme === 'dark' ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-            </Button>
-          } />
+          <TooltipTrigger
+            onClick={handleToggleTheme}
+            render={
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+              >
+                {theme === 'dark' ? (
+                  <Sun className="h-4 w-4" />
+                ) : (
+                  <Moon className="h-4 w-4" />
+                )}
+              </Button>
+            }
+          />
           <TooltipContent>
             {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
           </TooltipContent>
