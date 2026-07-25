@@ -139,21 +139,10 @@ function EntryEditorContent() {
     [entry, entryId]
   );
 
-  // Auto-resize textarea
+  // Content change handler
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     autoSave('content', e.target.value);
-    // Auto-resize
-    e.target.style.height = 'auto';
-    e.target.style.height = `${e.target.scrollHeight}px`;
   };
-
-  // Initial textarea resize
-  useEffect(() => {
-    if (contentRef.current && entry) {
-      contentRef.current.style.height = 'auto';
-      contentRef.current.style.height = `${contentRef.current.scrollHeight}px`;
-    }
-  }, [isLoading]);
 
   const handleToggleFavorite = async () => {
     if (!entry) return;
@@ -450,7 +439,7 @@ function EntryEditorContent() {
         value={entry.content}
         onChange={handleContentChange}
         placeholder="What did you work on..."
-        className="w-full min-h-[140px] resize-none bg-transparent text-sm leading-relaxed outline-none placeholder:text-muted-foreground/40"
+        className="w-full h-64 sm:h-72 rounded-xl border border-border/60 bg-muted/20 p-3.5 text-sm leading-relaxed outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 overflow-y-auto resize-none placeholder:text-muted-foreground/40"
       />
 
       <Separator />
