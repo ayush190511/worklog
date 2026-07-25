@@ -81,12 +81,10 @@ export const entryRepository = {
     offset = 0,
     limit = 50
   ): Promise<EntryWithRelations[]> {
-    let collection = db.entries.where('deletedAt').equals(0 as unknown as Date);
-
-    // Dexie doesn't support null indexing well, so filter in-memory for soft-deletes
+    // Fetch all non-deleted entries (IndexedDB null indexing workaround: filter in-memory)
     let entries = await db.entries
       .orderBy(sortBy)
-      .filter((e) => e.deletedAt === null)
+      .filter((e) => !e.deletedAt)
       .toArray();
 
     // Apply filters
@@ -260,7 +258,7 @@ export const entryRepository = {
 
   /** Get total count of active entries */
   async count(): Promise<number> {
-    return (await db.entries.filter((e) => e.deletedAt === null).count());
+    return (await db.entries.filter((e) => !e.deletedAt).count());
   },
 
   /** Get entries count for this week */
@@ -272,7 +270,7 @@ export const entryRepository = {
     weekStart.setDate(diff);
     weekStart.setHours(0, 0, 0, 0);
     return (await db.entries.filter(
-      (e) => e.deletedAt === null && e.createdAt >= weekStart
+      (e) => !e.deletedAt && e.createdAt >= weekStart
     ).count());
   },
 
@@ -283,7 +281,7 @@ export const entryRepository = {
     yearAgo.setHours(0, 0, 0, 0);
 
     const entries = await db.entries
-      .filter((e) => e.deletedAt === null && e.createdAt >= yearAgo)
+      .filter((e) => !e.deletedAt && e.createdAt >= yearAgo)
       .toArray();
 
     const countMap = new Map<string, number>();

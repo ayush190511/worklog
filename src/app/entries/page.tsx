@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Plus, Search, Star, Pin, FileText, ImageIcon,
-  SortAsc, SortDesc, Filter,
+  SortAsc, SortDesc, Trash2,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -108,6 +108,12 @@ function EntriesContent() {
     });
     router.push(`/entries/edit?id=${entry.id}`);
   };
+
+  const handleDeleteEntry = useCallback(async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    await entryRepository.softDelete(id);
+    setEntries((prev) => prev.filter((entry) => entry.id !== id));
+  }, []);
 
   const loadMore = () => {
     setPage((p) => p + 1);
@@ -216,49 +222,60 @@ function EntriesContent() {
       ) : (
         <div className="space-y-1">
           {entries.map((entry) => (
-            <button
+            <div
               key={entry.id}
-              onClick={() => router.push(`/entries/${entry.id}`)}
-              className="flex w-full items-start gap-3 rounded-xl border border-transparent px-4 py-3 text-left transition-all hover:border-border hover:bg-accent/50"
+              className="group flex w-full items-start gap-3 rounded-xl border border-transparent px-4 py-3 text-left transition-all hover:border-border hover:bg-accent/50"
             >
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  {entry.pinned && <Pin className="h-3 w-3 shrink-0 text-primary" />}
-                  {entry.favorite && <Star className="h-3 w-3 shrink-0 fill-yellow-500 text-yellow-500" />}
-                  <span className="truncate text-sm font-medium">
-                    {entry.title || 'Untitled'}
-                  </span>
-                </div>
-                <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
-                  {entry.project && (
-                    <span className="flex items-center gap-1">
-                      <span
-                        className="inline-block h-2 w-2 rounded-full"
-                        style={{ backgroundColor: entry.project.color }}
-                      />
-                      {entry.project.name}
+              <button
+                className="flex flex-1 min-w-0 items-start gap-3 text-left"
+                onClick={() => router.push(`/entries/edit?id=${entry.id}`)}
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    {entry.pinned && <Pin className="h-3 w-3 shrink-0 text-primary" />}
+                    {entry.favorite && <Star className="h-3 w-3 shrink-0 fill-yellow-500 text-yellow-500" />}
+                    <span className="truncate text-sm font-medium">
+                      {entry.title || 'Untitled'}
                     </span>
-                  )}
-                  {entry.category && <span>· {entry.category.name}</span>}
-                  {entry.tags.length > 0 && (
-                    <span>· {entry.tags.map((t) => t.name).join(', ')}</span>
-                  )}
-                  {entry.imageCount > 0 && (
-                    <span className="flex items-center gap-0.5">
-                      · <ImageIcon className="h-3 w-3" /> {entry.imageCount}
-                    </span>
+                  </div>
+                  <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
+                    {entry.project && (
+                      <span className="flex items-center gap-1">
+                        <span
+                          className="inline-block h-2 w-2 rounded-full"
+                          style={{ backgroundColor: entry.project.color }}
+                        />
+                        {entry.project.name}
+                      </span>
+                    )}
+                    {entry.category && <span>· {entry.category.name}</span>}
+                    {entry.tags.length > 0 && (
+                      <span>· {entry.tags.map((t) => t.name).join(', ')}</span>
+                    )}
+                    {entry.imageCount > 0 && (
+                      <span className="flex items-center gap-0.5">
+                        · <ImageIcon className="h-3 w-3" /> {entry.imageCount}
+                      </span>
+                    )}
+                  </div>
+                  {entry.content && (
+                    <p className="mt-1 text-xs text-muted-foreground/60 line-clamp-1">
+                      {truncate(entry.content, 150)}
+                    </p>
                   )}
                 </div>
-                {entry.content && (
-                  <p className="mt-1 text-xs text-muted-foreground/60 line-clamp-1">
-                    {truncate(entry.content, 150)}
-                  </p>
-                )}
-              </div>
-              <span className="shrink-0 text-xs text-muted-foreground whitespace-nowrap">
-                {formatRelativeTime(entry.createdAt)}
-              </span>
-            </button>
+                <span className="shrink-0 text-xs text-muted-foreground whitespace-nowrap">
+                  {formatRelativeTime(entry.createdAt)}
+                </span>
+              </button>
+              <button
+                onClick={(e) => handleDeleteEntry(e, entry.id)}
+                className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity ml-1 mt-0.5 rounded p-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                title="Delete entry"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
           ))}
 
           {hasMore && !search && (
