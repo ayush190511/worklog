@@ -135,6 +135,23 @@ function EntryEditorContent() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [router]);
 
+  // Auto-focus title input when entry finishes loading
+  useEffect(() => {
+    if (!isLoading && entry) {
+      setTimeout(() => {
+        titleRef.current?.focus();
+      }, 50);
+    }
+  }, [isLoading, entry?.id]);
+
+  // Handle Enter key on Title to move focus down to Content
+  const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      contentRef.current?.focus();
+    }
+  };
+
   // Auto-save with debounce
   const autoSave = useCallback(
     (field: string, value: string | null) => {
@@ -446,14 +463,22 @@ function EntryEditorContent() {
       </div>
 
       {/* Title */}
-      <input
-        ref={titleRef}
-        type="text"
-        value={entry.title}
-        onChange={(e) => autoSave('title', e.target.value)}
-        placeholder="Entry title..."
-        className="w-full bg-transparent text-2xl font-bold tracking-tight outline-none placeholder:text-muted-foreground/40"
-      />
+      <div className="flex items-center justify-between gap-3">
+        <input
+          ref={titleRef}
+          type="text"
+          value={entry.title}
+          onChange={(e) => autoSave('title', e.target.value)}
+          onKeyDown={handleTitleKeyDown}
+          placeholder="Entry title..."
+          className="flex-1 bg-transparent text-2xl font-bold tracking-tight outline-none placeholder:text-muted-foreground/40"
+        />
+        <div className="shrink-0 hidden sm:flex items-center gap-1.5 rounded-md border border-border/40 bg-muted/40 px-2 py-1 text-[11px] text-muted-foreground/80 select-none">
+          <span>Press</span>
+          <kbd className="rounded border border-border bg-background px-1 py-0.5 text-[10px] font-mono shadow-xs font-semibold text-foreground">↵ Enter</kbd>
+          <span>to write content</span>
+        </div>
+      </div>
 
       {/* Content */}
       <textarea
