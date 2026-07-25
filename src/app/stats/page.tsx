@@ -137,11 +137,17 @@ export default function StatsPage() {
                     allowDecimals={false}
                   />
                   <RechartsTooltip
-                    contentStyle={{
-                      backgroundColor: 'hsl(var(--popover))',
-                      border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px',
-                      fontSize: '12px',
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0].payload;
+                        return (
+                          <div className="rounded-lg border border-border bg-popover px-3 py-2 text-xs shadow-md">
+                            <p className="font-semibold text-popover-foreground">{data.fullMonth || data.month}</p>
+                            <p className="text-muted-foreground">{data.count} {data.count === 1 ? 'entry' : 'entries'}</p>
+                          </div>
+                        );
+                      }
+                      return null;
                     }}
                   />
                   <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
@@ -198,12 +204,12 @@ export default function StatsPage() {
         </Card>
       </div>
 
-      {/* Activity heatmap placeholder */}
+      {/* Activity heatmap */}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-sm font-medium">
             <Calendar className="h-4 w-4" />
-            Activity
+            Activity Heatmap
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -265,11 +271,10 @@ function OverviewCard({ icon: Icon, label, value }: { icon: React.ElementType; l
   );
 }
 
-/** GitHub-style activity grid */
+/** Enhanced activity grid with Month & Year headers, day labels, and legend */
 function ActivityGrid({ data }: { data: { date: string; count: number }[] }) {
-  // Build a 52-week × 7-day grid
   const today = new Date();
-  const grid: { date: string; count: number; dayOfWeek: number }[] = [];
+  const grid: { date: string; count: number; dayOfWeek: number; month: number; year: number }[] = [];
   const dataMap = new Map(data.map((d) => [d.date, d.count]));
 
   for (let i = 364; i >= 0; i--) {
@@ -280,52 +285,126 @@ function ActivityGrid({ data }: { data: { date: string; count: number }[] }) {
       date: key,
       count: dataMap.get(key) ?? 0,
       dayOfWeek: d.getDay(),
+      month: d.getMonth(),
+      year: d.getFullYear(),
     });
   }
 
   const maxCount = Math.max(...grid.map((g) => g.count), 1);
 
   const getColor = (count: number) => {
-    if (count === 0) return 'bg-muted';
+    if (count === 0) return 'bg-muted/60 dark:bg-muted/40';
     const intensity = count / maxCount;
-    if (intensity < 0.25) return 'bg-primary/20';
-    if (intensity < 0.5) return 'bg-primary/40';
-    if (intensity < 0.75) return 'bg-primary/60';
-    return 'bg-primary';
+    if (intensity < 0.25) return 'bg-emerald-500/30 dark:bg-emerald-500/25';
+    if (intensity < 0.5) return 'bg-emerald-500/50 dark:bg-emerald-500/45';
+    if (intensity < 0.75) return 'bg-emerald-500/75 dark:bg-emerald-500/70';
+    return 'bg-emerald-500 dark:bg-emerald-400';
   };
 
   // Group by weeks
-  const weeks: typeof grid[] = [];
+  const weeks: { days: typeof grid; monthLabel?: string }[] = [];
   let currentWeek: typeof grid = [];
+  let lastMonth = -1;
+
   for (const day of grid) {
     if (day.dayOfWeek === 0 && currentWeek.length > 0) {
-      weeks.push(currentWeek);
+      const firstDay = currentWeek[0];
+      let monthLabel: string | undefined = undefined;
+      if (firstDay.month !== lastMonth) {
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        monthLabel = `${monthNames[firstDay.month]} '${String(firstDay.year).slice(2)}`;
+        lastMonth = firstDay.month;
+      }
+      weeks.push({ days: currentWeek, monthLabel });
       currentWeek = [];
     }
     currentWeek.push(day);
   }
-  if (currentWeek.length > 0) weeks.push(currentWeek);
+  if (currentWeek.length > 0) {
+    const firstDay = currentWeek[0];
+    let monthLabel: string | undefined = undefined;
+    if (firstDay.month !== lastMonth) {
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      monthLabel = `${monthNames[firstDay.month]} '${String(firstDay.year).slice(2)}`;
+    }
+    weeks.push({ days: currentWeek, monthLabel });
+  }
+
+  const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
 
   return (
-    <div className="overflow-x-auto">
-      <div className="flex gap-[3px] min-w-[700px]">
-        {weeks.map((week, wi) => (
-          <div key={wi} className="flex flex-col gap-[3px]">
-            {week.map((day) => (
-              <div
-                key={day.date}
-                className={`h-[12px] w-[12px] rounded-[2px] ${getColor(day.count)}`}
-                title={`${day.date}: ${day.count} entries`}
-              />
+    <div className="space-y-3 overflow-x-auto pb-2">
+      <div className="inline-flex flex-col gap-1.5 min-w-[760px]">
+        {/* Month & Year Headers */}
+        <div className="flex pl-7 text-[11px] font-medium text-muted-foreground">
+          {weeks.map((week, idx) => (
+            <div key={idx} className="w-[15px] shrink-0 text-left overflow-visible whitespace-nowrap">
+              {week.monthLabel ? (
+                <span className="inline-block font-semibold text-foreground/90">{week.monthLabel}</span>
+              ) : null}
+            </div>
+          ))}
+        </div>
+
+        {/* Days & Heatmap Grid */}
+        <div className="flex items-center gap-1.5">
+          {/* Day of week labels */}
+          <div className="flex flex-col gap-[3px] pr-1 text-[10px] text-muted-foreground/70 font-mono select-none">
+            {dayLabels.map((label, idx) => (
+              <span key={idx} className="h-[12px] leading-[12px] text-right">
+                {label}
+              </span>
             ))}
           </div>
-        ))}
+
+          {/* Grid columns */}
+          <div className="flex gap-[3px]">
+            {weeks.map((week, wi) => (
+              <div key={wi} className="flex flex-col gap-[3px]">
+                {week.days.map((day) => {
+                  const dateObj = new Date(day.date);
+                  const formattedDate = dateObj.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  });
+                  return (
+                    <div
+                      key={day.date}
+                      className={`h-[12px] w-[12px] rounded-[3px] transition-transform hover:scale-125 hover:z-10 ${getColor(
+                        day.count
+                      )}`}
+                      title={`${formattedDate}: ${day.count} ${day.count === 1 ? 'entry' : 'entries'}`}
+                    />
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Legend & Stats */}
+        <div className="flex items-center justify-between pt-2 px-1 text-xs text-muted-foreground">
+          <span className="text-[11px]">
+            Showing activity for the past 365 days
+          </span>
+          <div className="flex items-center gap-1.5 text-[11px]">
+            <span>Less</span>
+            <div className="h-3 w-3 rounded-[3px] bg-muted/60 dark:bg-muted/40" />
+            <div className="h-3 w-3 rounded-[3px] bg-emerald-500/30 dark:bg-emerald-500/25" />
+            <div className="h-3 w-3 rounded-[3px] bg-emerald-500/50 dark:bg-emerald-500/45" />
+            <div className="h-3 w-3 rounded-[3px] bg-emerald-500/75 dark:bg-emerald-500/70" />
+            <div className="h-3 w-3 rounded-[3px] bg-emerald-500 dark:bg-emerald-400" />
+            <span>More</span>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-function buildMonthlyData(activity: { date: string; count: number }[]): { month: string; count: number }[] {
+function buildMonthlyData(activity: { date: string; count: number }[]): { month: string; fullMonth: string; count: number }[] {
   const months = new Map<string, number>();
   const now = new Date();
 
@@ -348,7 +427,8 @@ function buildMonthlyData(activity: { date: string; count: number }[]): { month:
     const [year, month] = key.split('-');
     const d = new Date(Number(year), Number(month) - 1);
     return {
-      month: d.toLocaleDateString('en-US', { month: 'short' }),
+      month: `${d.toLocaleDateString('en-US', { month: 'short' })} '${year.slice(2)}`,
+      fullMonth: d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
       count,
     };
   });
