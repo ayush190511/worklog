@@ -121,80 +121,83 @@ function EntriesContent() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Entries</h1>
-          <p className="text-sm text-muted-foreground">Your work log</p>
-        </div>
-        <Button onClick={handleNewEntry} size="sm">
-          <Plus className="mr-1 h-4 w-4" /> New Entry
-        </Button>
-      </div>
-
-      {/* Filters */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Search entries..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9"
-          />
-        </div>
-        <div className="flex gap-2">
-          <Select value={selectedProject} onValueChange={(v) => v && setSelectedProject(v)}>
-            <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Project">
-                {selectedProject === 'all' ? "All Projects" : (
-                  <span className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: projects.find(p => p.id === selectedProject)?.color }} />
-                    {projects.find(p => p.id === selectedProject)?.name}
-                  </span>
-                )}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Projects</SelectItem>
-              {projects.map((p) => (
-                <SelectItem key={p.id} value={p.id}>
-                  <span className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} />
-                    {p.name}
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select value={selectedCategory} onValueChange={(v) => v && setSelectedCategory(v)}>
-            <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Category">
-                {selectedCategory === 'all' ? "All Categories" : categories.find(c => c.id === selectedCategory)?.name}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              {categories.map((c) => (
-                <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
-            className="shrink-0"
-          >
-            {sortOrder === 'desc' ? (
-              <SortDesc className="h-4 w-4" />
-            ) : (
-              <SortAsc className="h-4 w-4" />
-            )}
+    <div className="space-y-4">
+      {/* Sticky Header & Filters */}
+      <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-md pb-3 pt-1 space-y-4 border-b border-border/50 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Entries</h1>
+            <p className="text-sm text-muted-foreground">Your work log</p>
+          </div>
+          <Button onClick={handleNewEntry} size="sm">
+            <Plus className="mr-1 h-4 w-4" /> New Entry
           </Button>
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search entries..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          <div className="flex gap-2">
+            <Select value={selectedProject} onValueChange={(v) => v && setSelectedProject(v)}>
+              <SelectTrigger className="w-[150px]">
+                <SelectValue placeholder="Project">
+                  {selectedProject === 'all' ? "All Projects" : (
+                    <span className="flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: projects.find(p => p.id === selectedProject)?.color }} />
+                      {projects.find(p => p.id === selectedProject)?.name}
+                    </span>
+                  )}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Projects</SelectItem>
+                {projects.map((p) => (
+                  <SelectItem key={p.id} value={p.id}>
+                    <span className="flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} />
+                      {p.name}
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={selectedCategory} onValueChange={(v) => v && setSelectedCategory(v)}>
+              <SelectTrigger className="w-[150px]">
+                <SelectValue placeholder="Category">
+                  {selectedCategory === 'all' ? "All Categories" : categories.find(c => c.id === selectedCategory)?.name}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                {categories.map((c) => (
+                  <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+              className="shrink-0"
+            >
+              {sortOrder === 'desc' ? (
+                <SortDesc className="h-4 w-4" />
+              ) : (
+                <SortAsc className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
         </div>
       </div>
 

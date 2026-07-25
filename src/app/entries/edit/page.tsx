@@ -267,62 +267,64 @@ function EntryEditorContent() {
 
   return (
     <div className="space-y-4">
-      {/* Top controls */}
-      <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.back()}
-          className="text-muted-foreground"
-        >
-          <ArrowLeft className="mr-1 h-4 w-4" /> Back
-        </Button>
-        <div className="flex items-center gap-1.5">
-          {/* Save status */}
-          <span className="mr-2 text-xs text-muted-foreground">
-            {saveStatus === 'saving' && (
-              <span className="flex items-center gap-1">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-yellow-500" />
-                Saving...
-              </span>
-            )}
-            {saveStatus === 'saved' && (
-              <span className="flex items-center gap-1 text-green-500">
-                <Check className="h-3 w-3" /> Saved
-              </span>
-            )}
-          </span>
+      {/* Sticky Top Bar & Meta Bar Header */}
+      <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-md pb-3 pt-1 space-y-3 border-b border-border/50 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        {/* Top controls */}
+        <div className="flex items-center justify-between">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.back()}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="mr-1 h-4 w-4" /> Back
+          </Button>
+          <div className="flex items-center gap-1.5">
+            {/* Save status */}
+            <span className="mr-2 text-xs text-muted-foreground">
+              {saveStatus === 'saving' && (
+                <span className="flex items-center gap-1">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-yellow-500" />
+                  Saving...
+                </span>
+              )}
+              {saveStatus === 'saved' && (
+                <span className="flex items-center gap-1 text-green-500">
+                  <Check className="h-3 w-3" /> Saved
+                </span>
+              )}
+            </span>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleToggleFavorite}
-            className="h-8 w-8"
-          >
-            <Star
-              className={`h-4 w-4 ${entry.favorite ? 'fill-yellow-500 text-yellow-500' : 'text-muted-foreground'}`}
-            />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleTogglePin}
-            className="h-8 w-8"
-          >
-            <Pin
-              className={`h-4 w-4 ${entry.pinned ? 'text-primary' : 'text-muted-foreground'}`}
-            />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleDelete}
-            className="h-8 w-8 text-muted-foreground hover:text-destructive"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleToggleFavorite}
+              className="h-8 w-8"
+            >
+              <Star
+                className={`h-4 w-4 ${entry.favorite ? 'fill-yellow-500 text-yellow-500' : 'text-muted-foreground'}`}
+              />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleTogglePin}
+              className="h-8 w-8"
+            >
+              <Pin
+                className={`h-4 w-4 ${entry.pinned ? 'text-primary' : 'text-muted-foreground'}`}
+              />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleDelete}
+              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
-      </div>
 
       {/* Meta bar: Project, Category, Tags */}
       <div className="flex flex-wrap items-center gap-2">
@@ -430,8 +432,7 @@ function EntryEditorContent() {
           </Popover>
         </div>
       </div>
-
-      <Separator />
+      </div>
 
       {/* Title */}
       <input
