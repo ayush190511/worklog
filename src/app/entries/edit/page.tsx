@@ -59,6 +59,7 @@ function EntryEditorContent() {
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'idle'>('idle');
   const [showVersions, setShowVersions] = useState(false);
   const [newTagName, setNewTagName] = useState('');
+  const [isTitleFocused, setIsTitleFocused] = useState(false);
 
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -463,21 +464,25 @@ function EntryEditorContent() {
       </div>
 
       {/* Title */}
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 min-h-[36px]">
         <input
           ref={titleRef}
           type="text"
           value={entry.title}
           onChange={(e) => autoSave('title', e.target.value)}
           onKeyDown={handleTitleKeyDown}
+          onFocus={() => setIsTitleFocused(true)}
+          onBlur={() => setIsTitleFocused(false)}
           placeholder="Entry title..."
           className="flex-1 bg-transparent text-2xl font-bold tracking-tight outline-none placeholder:text-muted-foreground/40"
         />
-        <div className="shrink-0 hidden sm:flex items-center gap-1.5 rounded-md border border-border/40 bg-muted/40 px-2 py-1 text-[11px] text-muted-foreground/80 select-none">
-          <span>Press</span>
-          <kbd className="rounded border border-border bg-background px-1 py-0.5 text-[10px] font-mono shadow-xs font-semibold text-foreground">↵ Enter</kbd>
-          <span>to write content</span>
-        </div>
+        {isTitleFocused && (
+          <div className="shrink-0 hidden sm:flex items-center gap-1.5 rounded-md border border-border/40 bg-muted/40 px-2 py-1 text-[11px] text-muted-foreground/80 select-none animate-in fade-in-0 duration-150">
+            <span>Press</span>
+            <kbd className="rounded border border-border bg-background px-1 py-0.5 text-[10px] font-mono shadow-xs font-semibold text-foreground">↵ Enter</kbd>
+            <span>to write content</span>
+          </div>
+        )}
       </div>
 
       {/* Content */}
