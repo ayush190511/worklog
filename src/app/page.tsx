@@ -170,7 +170,7 @@ export default function DashboardPage() {
               {pinnedEntries.map((entry) => (
                 <button
                   key={entry.id}
-                  onClick={() => router.push(`/entries/${entry.id}`)}
+                  onClick={() => router.push(`/entries/edit?id=${entry.id}`)}
                   className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors hover:bg-accent"
                 >
                   <Pin className="h-3 w-3 shrink-0 text-muted-foreground" />
@@ -198,7 +198,7 @@ export default function DashboardPage() {
               {favoriteEntries.map((entry) => (
                 <button
                   key={entry.id}
-                  onClick={() => router.push(`/entries/${entry.id}`)}
+                  onClick={() => router.push(`/entries/edit?id=${entry.id}`)}
                   className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors hover:bg-accent"
                 >
                   <Star className="h-3 w-3 shrink-0 text-yellow-500" />
@@ -237,7 +237,7 @@ export default function DashboardPage() {
               {recentEntries.map((entry) => (
                 <button
                   key={entry.id}
-                  onClick={() => router.push(`/entries/${entry.id}`)}
+                  onClick={() => router.push(`/entries/edit?id=${entry.id}`)}
                   className="flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-accent"
                 >
                   <div className="flex-1 min-w-0">
