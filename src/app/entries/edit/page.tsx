@@ -450,7 +450,7 @@ function EntryEditorContent() {
         value={entry.content}
         onChange={handleContentChange}
         placeholder="What did you work on..."
-        className="w-full min-h-[300px] resize-none bg-transparent text-sm leading-relaxed outline-none placeholder:text-muted-foreground/40"
+        className="w-full min-h-[140px] resize-none bg-transparent text-sm leading-relaxed outline-none placeholder:text-muted-foreground/40"
       />
 
       <Separator />
