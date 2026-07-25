@@ -126,12 +126,14 @@ export default function StatsPage() {
                 <BarChart data={monthlyData}>
                   <XAxis
                     dataKey="month"
-                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                    tick={{ fontSize: 11, fill: 'currentColor' }}
+                    className="text-muted-foreground"
                     axisLine={false}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                    tick={{ fontSize: 11, fill: 'currentColor' }}
+                    className="text-muted-foreground"
                     axisLine={false}
                     tickLine={false}
                     allowDecimals={false}
@@ -150,7 +152,7 @@ export default function StatsPage() {
                       return null;
                     }}
                   />
-                  <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="count" fill="currentColor" className="fill-zinc-700 dark:fill-zinc-200" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -293,12 +295,12 @@ function ActivityGrid({ data }: { data: { date: string; count: number }[] }) {
   const maxCount = Math.max(...grid.map((g) => g.count), 1);
 
   const getColor = (count: number) => {
-    if (count === 0) return 'bg-muted/60 dark:bg-muted/40';
+    if (count === 0) return 'bg-muted/50 dark:bg-muted/30';
     const intensity = count / maxCount;
-    if (intensity < 0.25) return 'bg-emerald-500/30 dark:bg-emerald-500/25';
-    if (intensity < 0.5) return 'bg-emerald-500/50 dark:bg-emerald-500/45';
-    if (intensity < 0.75) return 'bg-emerald-500/75 dark:bg-emerald-500/70';
-    return 'bg-emerald-500 dark:bg-emerald-400';
+    if (intensity < 0.25) return 'bg-zinc-300 dark:bg-zinc-700/80';
+    if (intensity < 0.5) return 'bg-zinc-400 dark:bg-zinc-500';
+    if (intensity < 0.75) return 'bg-zinc-600 dark:bg-zinc-300';
+    return 'bg-zinc-900 dark:bg-zinc-100';
   };
 
   // Group by weeks
@@ -391,11 +393,11 @@ function ActivityGrid({ data }: { data: { date: string; count: number }[] }) {
           </span>
           <div className="flex items-center gap-1.5 text-[11px]">
             <span>Less</span>
-            <div className="h-3 w-3 rounded-[3px] bg-muted/60 dark:bg-muted/40" />
-            <div className="h-3 w-3 rounded-[3px] bg-emerald-500/30 dark:bg-emerald-500/25" />
-            <div className="h-3 w-3 rounded-[3px] bg-emerald-500/50 dark:bg-emerald-500/45" />
-            <div className="h-3 w-3 rounded-[3px] bg-emerald-500/75 dark:bg-emerald-500/70" />
-            <div className="h-3 w-3 rounded-[3px] bg-emerald-500 dark:bg-emerald-400" />
+            <div className="h-3 w-3 rounded-[3px] bg-muted/50 dark:bg-muted/30" />
+            <div className="h-3 w-3 rounded-[3px] bg-zinc-300 dark:bg-zinc-700/80" />
+            <div className="h-3 w-3 rounded-[3px] bg-zinc-400 dark:bg-zinc-500" />
+            <div className="h-3 w-3 rounded-[3px] bg-zinc-600 dark:bg-zinc-300" />
+            <div className="h-3 w-3 rounded-[3px] bg-zinc-900 dark:bg-zinc-100" />
             <span>More</span>
           </div>
         </div>
